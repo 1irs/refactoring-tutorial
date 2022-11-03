@@ -25,17 +25,13 @@ class ShoppingCart:
         result: str = "Cart contents:\n"
 
         for entry in self.entries:
-            entry_price = entry.price()
-            total_cost += entry_price
+            total_cost += entry.price()
 
-            # Calculate discount.
-            entry_discount = entry.discount()
-
-            total_discount += entry_discount
+            total_discount += entry.discount()
 
             # Print each cart entry line.
-            result += f"* {entry.product.name} X {entry.qty} = {round(entry_price, 2)} "
-            result += f"(discount {round(entry_discount, 2)})\n"
+            result += f"* {entry.product.name} X {entry.qty} = {round(entry.price(), 2)} "
+            result += f"(discount {round(entry.discount(), 2)})\n"
 
         # Print footer.
         result += f"Total cost: {round(total_cost, 2)}\n"
