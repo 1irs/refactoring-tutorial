@@ -28,24 +28,8 @@ class ShoppingCart:
             total_cost += entry.product.price * entry.qty
             entry_discount: float = 0.0
 
-            # Calculate discount.
-            match entry.discount_type:
-                case DiscountType.NO_DISCOUNT:
-                    # Do nothing.
-                    pass
-                case DiscountType.COUPON_MINUS_TEN:
-                    # Make sure we don't give discount higher than the cost.
-                    # E.g. cost is 9, and the coupon is 10.
-                    entry_discount = (
-                        10.0
-                        if entry.product.price * entry.qty >= 10.0
-                        else entry.product.price * entry.qty
-                    )
-                case DiscountType.FIVE_OR_MORE_MINUS_5_PERCENT:
-                    if entry.qty >= 5:
-                        entry_discount = entry.product.price * entry.qty * 0.05
-                case DiscountType.EACH_THIRD_FREE:
-                    entry_discount = (entry.qty // 3) * entry.product.price
+            # Calculate discount_for_entry.
+            entry_discount = self.discount_for_entry(entry)
 
             total_discount += entry_discount
 
@@ -59,3 +43,24 @@ class ShoppingCart:
         result += f"Final cost: {round(total_cost-total_discount, 2)}\n"
 
         return result
+
+    def discount_for_entry(self, entry: CartEntry) -> float:
+        entry_discount: float = 0.0
+        match entry.discount_type:
+            case DiscountType.NO_DISCOUNT:
+                # Do nothing.
+                pass
+            case DiscountType.COUPON_MINUS_TEN:
+                # Make sure we don't give discount_for_entry higher than the cost.
+                # E.g. cost is 9, and the coupon is 10.
+                entry_discount = (
+                    10.0
+                    if entry.product.price * entry.qty >= 10.0
+                    else entry.product.price * entry.qty
+                )
+            case DiscountType.FIVE_OR_MORE_MINUS_5_PERCENT:
+                if entry.qty >= 5:
+                    entry_discount = entry.product.price * entry.qty * 0.05
+            case DiscountType.EACH_THIRD_FREE:
+                entry_discount = (entry.qty // 3) * entry.product.price
+        return entry_discount
