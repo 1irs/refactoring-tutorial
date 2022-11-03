@@ -6,7 +6,8 @@
 # Presenter: Ihor Harahatyi
 
 
-from cart_entry import CartEntry, DiscountType
+from cart_entry import CartEntry
+from description import TextDescription
 
 
 class ShoppingCart:
@@ -19,19 +20,7 @@ class ShoppingCart:
     def description(self) -> str:
         """Gets a text representation of a cart."""
         # Print header.
-        result: str = "Cart contents:\n"
-
-        for entry in self.entries:
-            # Print each cart entry line.
-            result += f"* {entry.product.name} X {entry.qty} = {round(entry.price(), 2)} "
-            result += f"(discount {round(entry.discount(), 2)})\n"
-
-        # Print footer.
-        result += f"Total cost: {round(self.get_total_cost(), 2)}\n"
-        result += f"Discount: {round(self.get_total_discount(), 2)}\n"
-        result += f"Final cost: {round(self.get_total_cost()-self.get_total_discount(), 2)}\n"
-
-        return result
+        return TextDescription(self).get()
 
     def html_description(self) -> str:
         """Gets an HTML representation of a cart."""
