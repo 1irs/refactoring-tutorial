@@ -25,7 +25,7 @@ class ShoppingCart:
         result: str = "Cart contents:\n"
 
         for entry in self.entries:
-            entry_price = entry.product.price * entry.qty
+            entry_price = entry.price()
             total_cost += entry_price
 
             # Calculate discount.

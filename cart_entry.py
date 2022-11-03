@@ -50,3 +50,6 @@ class CartEntry:
             case DiscountType.EACH_THIRD_FREE:
                 entry_discount = (self.qty // 3) * self.product.price
         return entry_discount
+
+    def price(self):
+        return self.product.price * self.qty
