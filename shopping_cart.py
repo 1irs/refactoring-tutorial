@@ -26,7 +26,6 @@ class ShoppingCart:
 
         for entry in self.entries:
             total_cost += entry.product.price * entry.qty
-            entry_discount: float = 0.0
 
             # Calculate discount_for_entry.
             entry_discount = self.discount_for_entry(entry)
