@@ -1,5 +1,4 @@
 from cart_entry import CartEntry, DiscountType
-from product import ProductCategory
 
 
 class ShoppingCart:
@@ -12,7 +11,6 @@ class ShoppingCart:
     def description(self) -> str:
         """Gets a text representation of a cart."""
         total_cost: float = 0.0
-        total_tax: float = 0.0
         total_discount: float = 0.0
 
         # Print header.
@@ -21,7 +19,6 @@ class ShoppingCart:
         for entry in self.entries:
             total_cost += entry.product.price * entry.qty
             entry_discount: float = 0.0
-            entry_tax: float = 0.0
 
             # Calculate discount.
             match entry.discount_type:
@@ -44,25 +41,13 @@ class ShoppingCart:
 
             total_discount += entry_discount
 
-            # Calculate tax.
-            match entry.product.category:
-                case ProductCategory.ALCOHOL | ProductCategory.CLOTHES | ProductCategory.FOOD:
-                    entry_tax = (entry.product.price * entry.qty - entry_discount) * 0.20
-                case ProductCategory.PHARMA:
-                    entry_tax = (entry.product.price * entry.qty - entry_discount) * 0.08
-                case ProductCategory.FIRST_NEED:
-                    entry_tax = (entry.product.price * entry.qty - entry_discount) * 0.0
-
-            total_tax += entry_tax
-
             # Print each cart entry line.
             result += f"* {entry.product.name} X {entry.qty} = {round(entry.product.price * entry.qty, 2)} "
-            result += f"(discount {round(entry_discount, 2)}, tax {round(entry_tax, 2)})\n"
+            result += f"(discount {round(entry_discount, 2)})\n"
 
         # Print footer.
         result += f"Total cost: {round(total_cost, 2)}\n"
         result += f"Discount: {round(total_discount, 2)}\n"
         result += f"Final cost: {round(total_cost-total_discount, 2)}\n"
-        result += f"Taxes: {round(total_tax, 2)}\n"
 
         return result
