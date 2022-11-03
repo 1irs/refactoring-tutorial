@@ -33,6 +33,25 @@ class ShoppingCart:
 
         return result
 
+    def html_description(self) -> str:
+        """Gets an HTML representation of a cart."""
+        # Print header.
+        result: str = "<h1>Cart contents:</h1>\n"
+        result += "<ul>\n"
+
+        for entry in self.entries:
+            # Print each cart entry line.
+            result += f"<li>{entry.product.name} X {entry.qty} = <b>{round(entry.price(), 2)}</b> "
+            result += f"(discount {round(entry.discount(), 2)})</li>\n"
+
+        # Print footer.
+        result += "</ul>\n"
+        result += f"<p>Total cost: <b>{round(self.get_total_cost(), 2)}</b></p>\n"
+        result += f"<p>Discount: <b>{round(self.get_total_discount(), 2)}</b></p>\n"
+        result += f"<p>Final cost: <b>{round(self.get_total_cost()-self.get_total_discount(), 2)}</b></p>\n"
+
+        return result
+
     def get_total_cost(self) -> float:
         total_cost: float = 0.0
         for entry in self.entries:

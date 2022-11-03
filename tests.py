@@ -109,3 +109,23 @@ def test_minus_10_coupon_less_than_10() -> None:
         "Discount: 9.0\n"
         "Final cost: 0.0\n"
     )
+
+
+def test_html_single_product() -> None:
+    cart = ShoppingCart()
+    cart.add_entry(
+        CartEntry(
+            Product("T-shirt", 9.0),
+            1,
+            DiscountType.COUPON_MINUS_TEN,
+        )
+    )
+    assert cart.html_description() == (
+        "<h1>Cart contents:</h1>\n"
+        "<ul>\n"
+        "<li>T-shirt X 1 = <b>9.0</b> (discount 9.0)</li>\n"
+        "</ul>\n"
+        "<p>Total cost: <b>9.0</b></p>\n"
+        "<p>Discount: <b>9.0</b></p>\n"
+        "<p>Final cost: <b>0.0</b></p>\n"
+    )
