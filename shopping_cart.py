@@ -18,15 +18,12 @@ class ShoppingCart:
 
     def description(self) -> str:
         """Gets a text representation of a cart."""
-        total_cost: float = 0.0
         total_discount: float = 0.0
 
         # Print header.
         result: str = "Cart contents:\n"
 
         for entry in self.entries:
-            total_cost += entry.price()
-
             total_discount += entry.discount()
 
             # Print each cart entry line.
@@ -34,8 +31,14 @@ class ShoppingCart:
             result += f"(discount {round(entry.discount(), 2)})\n"
 
         # Print footer.
-        result += f"Total cost: {round(total_cost, 2)}\n"
+        result += f"Total cost: {round(self.get_total_cost(), 2)}\n"
         result += f"Discount: {round(total_discount, 2)}\n"
-        result += f"Final cost: {round(total_cost-total_discount, 2)}\n"
+        result += f"Final cost: {round(self.get_total_cost()-total_discount, 2)}\n"
 
         return result
+
+    def get_total_cost(self) -> float:
+        total_cost: float = 0.0
+        for entry in self.entries:
+            total_cost += entry.price()
+        return total_cost
