@@ -1,4 +1,5 @@
 from cart_entry import CartEntry, DiscountType
+from pricing_strategy import CouponMinusTen
 from product import Product
 from shopping_cart import ShoppingCart
 
@@ -129,3 +130,10 @@ def test_html_single_product() -> None:
         "<p>Discount: <b>9.0</b></p>\n"
         "<p>Final cost: <b>0.0</b></p>\n"
     )
+
+
+def test_coupon_discount() -> None:
+    pricing_strategy = CouponMinusTen()
+    assert pricing_strategy.discount(9.99, 1) == 9.99
+    assert pricing_strategy.discount(10.00, 1) == 10.00
+    assert pricing_strategy.discount(10.01, 1) == 10.00
