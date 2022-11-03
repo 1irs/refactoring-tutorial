@@ -8,6 +8,7 @@
 
 from enum import Enum
 
+from pricing_strategy import NoDiscount, CouponMinusTen, FiveOrMoreMinus5Percent, EachThirdFree
 from product import Product
 
 
@@ -28,28 +29,21 @@ class CartEntry:
         assert qty > 0
         self.product = product
         self.qty = qty
-        self.discount_type = discount_type
+        self.set_discount_type(discount_type)
 
     def discount(self) -> float:
-        entry_discount: float = 0.0
-        match self.discount_type:
-            case DiscountType.NO_DISCOUNT:
-                # Do nothing.
-                pass
-            case DiscountType.COUPON_MINUS_TEN:
-                # Make sure we don't give discount higher than the cost.
-                # E.g. cost is 9, and the coupon is 10.
-                entry_discount = (
-                    10.0
-                    if self.product.price * self.qty >= 10.0
-                    else self.product.price * self.qty
-                )
-            case DiscountType.FIVE_OR_MORE_MINUS_5_PERCENT:
-                if self.qty >= 5:
-                    entry_discount = self.product.price * self.qty * 0.05
-            case DiscountType.EACH_THIRD_FREE:
-                entry_discount = (self.qty // 3) * self.product.price
-        return entry_discount
+        return self.pricing_strategy.discount(self.product.price, self.qty)
 
     def price(self):
         return self.product.price * self.qty
+
+    def set_discount_type(self, discount_type: DiscountType) -> None:
+        match discount_type:
+            case DiscountType.NO_DISCOUNT:
+                self.pricing_strategy = NoDiscount()
+            case DiscountType.COUPON_MINUS_TEN:
+                self.pricing_strategy = CouponMinusTen()
+            case DiscountType.FIVE_OR_MORE_MINUS_5_PERCENT:
+                self.pricing_strategy = FiveOrMoreMinus5Percent()
+            case DiscountType.EACH_THIRD_FREE:
+                self.pricing_strategy = EachThirdFree()
